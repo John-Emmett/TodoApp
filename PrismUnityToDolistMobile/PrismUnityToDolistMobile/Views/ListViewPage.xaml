@@ -51,7 +51,7 @@
                     <Grid BackgroundColor="#DC595F" HorizontalOptions="Fill" VerticalOptions="Fill">
                         <Grid VerticalOptions="Center" HorizontalOptions="Center">
                             <Image Grid.Column="0"
-                               Grid.Row="0"
+                               Grid.Row="0"                                
                                HeightRequest="35"
                                WidthRequest="35"
                                BackgroundColor="Transparent"

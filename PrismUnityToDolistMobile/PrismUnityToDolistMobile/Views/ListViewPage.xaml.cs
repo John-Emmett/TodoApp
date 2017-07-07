@@ -171,9 +171,11 @@ namespace PrismUnityToDolistMobile.Views
 
         private void Delete()
         {
+            var test = synclist.SelectedItem;
             if (itemIndex >= 0)
                 _viewmodel.Todos.RemoveAt(itemIndex);
-          // _viewmodel.DeleteTodos(_viewmodel.Todos.(itemIndex));
+          // _viewmodel.DeleteTodos( ); 
+         
             this.synclist.ResetSwipe();
         }
 
@@ -183,7 +185,7 @@ namespace PrismUnityToDolistMobile.Views
             {
                 rightImage = sender as Image;
                 (rightImage.Parent as View).GestureRecognizers.Add(new TapGestureRecognizer() { Command = new Command(Delete) });
-                rightImage.Source = ImageSource.FromResource("Delete.png");
+               
             }
         }
 
