@@ -40,13 +40,31 @@
                    ItemsSource="{Binding Todos, Mode=TwoWay}"
                    ItemSize="150"
                    AllowSwiping="True"
-                   SwipeStarted="ListView_SwipeStarted"
-                   SwipeEnded="ListView_SwipeEnded">
+                  SwipeOffset="360" SwipeThreshold="30"
+                  SwipeStarted="ListView_SwipeStarted" 
+                  SwipeEnded="ListView_SwipeEnded" 
+                  Swiping="ListView_Swiping">
+
+
+            <syncfusion:SfListView.RightSwipeTemplate>
+                <DataTemplate x:Name="RightSwipeTemplate">
+                    <Grid BackgroundColor="#DC595F" HorizontalOptions="Fill" VerticalOptions="Fill">
+                        <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                            <Image Grid.Column="0"
+                               Grid.Row="0"
+                               HeightRequest="35"
+                               WidthRequest="35"
+                               BackgroundColor="Transparent"
+                               BindingContextChanged="rightImage_BindingContextChanged"
+                               Source="Delete.png" />
+                           </Grid>
+                    </Grid>
+                </DataTemplate>
+            </syncfusion:SfListView.RightSwipeTemplate>
 
             <syncfusion:SfListView.ItemTemplate>
-
                 <DataTemplate>
-                    <Grid>
+                    <Grid Padding="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
@@ -57,8 +75,8 @@
                         <Label Grid.Row="1" Text="{Binding Id}"  FontAttributes="Italic" />
                         <Label Grid.Row="2" Text="Task"  FontAttributes="Bold" />
                         <Label Grid.Row="3" Text="{Binding Text}" FontAttributes="Italic"/>
-                        <!--<Label Grid.Row="4" Text="Created On"  FontAttributes="Bold" />
-                        <Label Grid.Row="5" Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy HH:MM:ss tt}'}" FontAttributes="Italic"/>-->
+                        <Label Grid.Row="4" Text="Created On"  FontAttributes="Bold" />
+                        <Label Grid.Row="5" Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy HH:MM:ss tt}'}" FontAttributes="Italic"/>
                     </Grid>
                 </DataTemplate>
             </syncfusion:SfListView.ItemTemplate>

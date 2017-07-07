@@ -18,15 +18,15 @@ namespace PrismUnityToDolistMobile.Views
         public ListViewPage()
         {
             InitializeComponent();
-            _viewmodel = (ListViewPageViewModel)BindingContext;
+            _viewmodel = (ListViewPageViewModel)BindingContext;        
         }
 
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            // await _viewmodel.GetTodos();
-             _viewmodel.GetTodos2();
+            await _viewmodel.GetTodos();
+            //_viewmodel.GetTodos2();
             synclist.RefreshView();
             synclist.SelectionMode = SelectionMode.Multiple;
             synclist.SelectionGesture = TouchGesture.Hold;
@@ -49,6 +49,7 @@ namespace PrismUnityToDolistMobile.Views
             });
             synclist.RefreshView();
         }
+   
 
         public void SortAlphaDesc()
         {
@@ -119,13 +120,13 @@ namespace PrismUnityToDolistMobile.Views
                    SortAlphaDesc,
                    ToolbarItemOrder.Secondary, 3)
                );
-            //list.Add(
-            //   new ToolbarItem(
-            //       "Sort by most recent",
-            //       "signin.png",
-            //       SortDateMostRecent,
-            //       ToolbarItemOrder.Secondary, 4)
-            //   );
+            list.Add(
+               new ToolbarItem(
+                   "Sort by most recent",
+                   "signin.png",
+                   SortDateMostRecent,
+                   ToolbarItemOrder.Secondary, 4)
+               );
             list.Add(
                 new ToolbarItem(
                     "Select All",
@@ -148,25 +149,32 @@ namespace PrismUnityToDolistMobile.Views
             DisplayAlert("Toolbar Sample", "Settings Clicked", "OK");
         }
 
-       
         Image rightImage;
-        int itemIndex = -1;
-    
-        private void Delete()
-        {
-            if (itemIndex >= 0)
-                _viewmodel.Todos.RemoveAt(itemIndex);
-            this.synclist.ResetSwipe();
-        }
+        int itemIndex = -1;   
 
         private void ListView_SwipeStarted(object sender, SwipeStartedEventArgs e)
         {
             itemIndex = -1;
         }
 
+        private void ListView_Swiping(object sender, SwipingEventArgs e)
+        {
+            if (e.ItemIndex == 1 && e.SwipeOffSet > 50)
+                e.Handled = true;
+        }
+
+
         private void ListView_SwipeEnded(object sender, SwipeEndedEventArgs e)
         {
             itemIndex = e.ItemIndex;
+        }
+
+        private void Delete()
+        {
+            if (itemIndex >= 0)
+                _viewmodel.Todos.RemoveAt(itemIndex);
+          // _viewmodel.DeleteTodos(_viewmodel.Todos.(itemIndex));
+            this.synclist.ResetSwipe();
         }
 
         private void rightImage_BindingContextChanged(object sender, EventArgs e)
@@ -175,8 +183,9 @@ namespace PrismUnityToDolistMobile.Views
             {
                 rightImage = sender as Image;
                 (rightImage.Parent as View).GestureRecognizers.Add(new TapGestureRecognizer() { Command = new Command(Delete) });
-                rightImage.Source = ImageSource.FromResource("Images.Delete.png");
+                rightImage.Source = ImageSource.FromResource("Delete.png");
             }
         }
+
     }
 }
