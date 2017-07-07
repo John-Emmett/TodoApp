@@ -174,8 +174,7 @@ namespace PrismUnityToDolistMobile.Views
             var test = synclist.SelectedItem;
             if (itemIndex >= 0)
                 _viewmodel.Todos.RemoveAt(itemIndex);
-          // _viewmodel.DeleteTodos( ); 
-         
+           _viewmodel.DeleteTodos((TodoItem)test);        
             this.synclist.ResetSwipe();
         }
 
