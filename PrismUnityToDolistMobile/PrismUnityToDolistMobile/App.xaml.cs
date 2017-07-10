@@ -28,9 +28,8 @@ namespace PrismUnityToDolistMobile
             NavigationService.NavigateAsync("LoginPage");
             NavigationService.NavigateAsync("MyMasterDetail/MyNavigationPage/MainPage", animated: false);
 
-            MobileCenter.Start("android=f0a40008-d2b6-47cb-806a-e851f233c020;" +
-                   "uwp={Your UWP App secret here};" +
-                   "ios={Your iOS App secret here}",
+            MobileCenter.Start("android=f0a40008-d2b6-47cb-806a-e851f233c020;" ,
+                  
                    typeof(Analytics), typeof(Crashes));
         }
 

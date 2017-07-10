@@ -4,21 +4,15 @@ using System;
 
 namespace PrismUnityToDolistMobile.Views
 {
-    public partial class MainPage : ContentPage, IDestructible
+    public partial class MainPage : ContentPage
     {
         public MainPage()
         {
             InitializeComponent();
         }
 
-        public void Destroy()
-        {
-           
-        }
+       
 
-        void Button_Clicked(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }

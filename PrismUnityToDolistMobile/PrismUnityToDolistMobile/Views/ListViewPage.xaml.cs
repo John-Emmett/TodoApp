@@ -18,7 +18,7 @@ namespace PrismUnityToDolistMobile.Views
         public ListViewPage()
         {
             InitializeComponent();
-            _viewmodel = (ListViewPageViewModel)BindingContext;        
+            _viewmodel = (ListViewPageViewModel)BindingContext;
         }
 
 
@@ -28,17 +28,26 @@ namespace PrismUnityToDolistMobile.Views
             await _viewmodel.GetTodos();
             //_viewmodel.GetTodos2();
             synclist.RefreshView();
-            synclist.SelectionMode = SelectionMode.Multiple;
+            //synclist.SelectionMode = SelectionMode.Multiple;
+            synclist.SelectionMode = SelectionMode.Single;
             synclist.SelectionGesture = TouchGesture.Hold;
-            this.ToolbarItems.Clear();
 
+            this.ToolbarItems.Clear();
             var toolBarItemsList = new List<ToolbarItem>();
             toolBarItemsList = GetToolBarItems().ToList<ToolbarItem>();
             foreach (var toolBarItem in toolBarItemsList)
             {
                 this.ToolbarItems.Add(toolBarItem);
             }
+
+            var searchbar = new SearchBar() { Placeholder = "Search here to filter" };
+            searchbar.TextChanged += OnFilterTextChanged;
+
+            synclist.Children.Add(searchbar);
+
+
         }
+        
 
         public void SortAlphaAsc()
         {
@@ -49,7 +58,7 @@ namespace PrismUnityToDolistMobile.Views
             });
             synclist.RefreshView();
         }
-   
+
 
         public void SortAlphaDesc()
         {
@@ -78,6 +87,7 @@ namespace PrismUnityToDolistMobile.Views
         public void DeselectAllItems()
         {
             synclist.SelectedItems.Clear();
+            
         }
 
         public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -87,6 +97,14 @@ namespace PrismUnityToDolistMobile.Views
             TodoDetail.BindingContext = todoItem;
             Navigation.PushAsync(TodoDetail);
         }
+
+        public void EditPage()          
+        {
+            _viewmodel.NavigateToDetailViewCommand.Execute((TodoItem)synclist.SelectedItem);
+           
+        }
+
+       
 
         private IList<ToolbarItem> GetToolBarItems()
         {
@@ -127,20 +145,20 @@ namespace PrismUnityToDolistMobile.Views
                    SortDateMostRecent,
                    ToolbarItemOrder.Secondary, 4)
                );
-            list.Add(
-                new ToolbarItem(
-                    "Select All",
-                    "signup.png",
-                    SelectAllItems,
-                    ToolbarItemOrder.Secondary, 5)
-                );
-            list.Add(
-               new ToolbarItem(
-                   "Deselect All",
-                   "signup.png",
-                   DeselectAllItems,
-                   ToolbarItemOrder.Secondary, 5)
-               );
+            //list.Add(
+            //    new ToolbarItem(
+            //        "Select All",
+            //        "signup.png",
+            //        SelectAllItems,
+            //        ToolbarItemOrder.Secondary, 5)
+            //    );
+            //list.Add(
+            //   new ToolbarItem(
+            //       "Deselect All",
+            //       "signup.png",
+            //       DeselectAllItems,
+            //       ToolbarItemOrder.Secondary, 5)
+            //   );
             return list;
         }
 
@@ -150,11 +168,14 @@ namespace PrismUnityToDolistMobile.Views
         }
 
         Image rightImage;
-        int itemIndex = -1;   
+        Image leftImage;
+        int itemIndex = -1;
 
         private void ListView_SwipeStarted(object sender, SwipeStartedEventArgs e)
         {
             itemIndex = -1;
+            //Selects whatever item is being swiped so it will be correctly deleted
+            synclist.SelectedItem = _viewmodel.Todos[e.ItemIndex];
         }
 
         private void ListView_Swiping(object sender, SwipingEventArgs e)
@@ -166,7 +187,7 @@ namespace PrismUnityToDolistMobile.Views
 
         private void ListView_SwipeEnded(object sender, SwipeEndedEventArgs e)
         {
-            itemIndex = e.ItemIndex;
+            itemIndex = e.ItemIndex;         
         }
 
         private void Delete()
@@ -174,8 +195,9 @@ namespace PrismUnityToDolistMobile.Views
             var test = synclist.SelectedItem;
             if (itemIndex >= 0)
                 _viewmodel.Todos.RemoveAt(itemIndex);
-           _viewmodel.DeleteTodos((TodoItem)test);        
+            _viewmodel.DeleteTodos((TodoItem)test);
             this.synclist.ResetSwipe();
+            synclist.RefreshView();
         }
 
         private void rightImage_BindingContextChanged(object sender, EventArgs e)
@@ -184,9 +206,61 @@ namespace PrismUnityToDolistMobile.Views
             {
                 rightImage = sender as Image;
                 (rightImage.Parent as View).GestureRecognizers.Add(new TapGestureRecognizer() { Command = new Command(Delete) });
-               
+
             }
         }
 
+        private void leftImage_BindingContextChanged(object sender, EventArgs e)
+        {
+            var selectedItem = synclist.SelectedItem as TodoItem;
+            if (leftImage == null)
+            {
+                leftImage = sender as Image;
+                (leftImage.Parent as View).GestureRecognizers.Add(new TapGestureRecognizer() { Command = new Command(EditPage) });
+            }
+        }
+        
+
+
+        SearchBar searchBar = null;
+        private void OnFilterTextChanged(object sender, TextChangedEventArgs e)
+        {
+            searchBar = (sender as SearchBar);
+            if (synclist.DataSource != null)
+            {
+                this.synclist.DataSource.Filter = FilterTasks;
+                this.synclist.DataSource.RefreshFilter();
+            }
+        }
+
+        private bool FilterTasks(object obj)
+        {
+            if (searchBar == null || searchBar.Text == null)
+                return true;
+
+            var todos = obj as TodoItem;
+            if (todos.Text.ToLower().Contains(searchBar.Text.ToLower())
+                 || todos.Text.ToLower().Contains(searchBar.Text.ToLower()))
+                return true;
+            else
+                return false;
+        }
+
+        private string _searchedText;
+        public string SearchedText
+        {
+            get { return _searchedText; }
+            set { _searchedText = value; OnPropertyChanged(); }
+        }
+
+        private void SearchCommandExecute()
+        {
+            var tempRecords = _viewmodel.Todos.Where(c => c.Text.Contains(SearchedText));
+            _viewmodel.Todos.Clear();
+            foreach (var item in tempRecords)
+            {
+                _viewmodel.Todos.Add(item);
+            }
+        }
     }
 }

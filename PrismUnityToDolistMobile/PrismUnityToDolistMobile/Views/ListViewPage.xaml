@@ -9,7 +9,7 @@
              Title="Tasks">
 
 
-    <StackLayout>
+    <StackLayout x:Name="listpage">
         <!--<Picker  Title="Sort Tasks By">
             <Picker.Items>
                 <x:String>Date Created</x:String>
@@ -19,13 +19,14 @@
             </Picker.Items>
         </Picker>-->
 
-        <!--<SearchBar x:Name="SearchListview"
+        <!--<SearchBar x:Name="searchB"
                    BindingContext="{Binding OnFilterTextChanged, Mode=TwoWay}"
                    SearchCommand="{Binding SearchCommandExecute}"
                    SearchCommandParameter="{Binding OnFilterTextChanged}"
                    Placeholder="Search Here to filter">
         </SearchBar>-->
 
+        
 
 
 
@@ -61,10 +62,28 @@
                     </Grid>
                 </DataTemplate>
             </syncfusion:SfListView.RightSwipeTemplate>
+            
+            <syncfusion:SfListView.LeftSwipeTemplate>
+                <DataTemplate x:Name="LeftSwipeTemplate">
+                <Grid>
+                    <Grid BackgroundColor="GreenYellow" HorizontalOptions="Fill" VerticalOptions="Fill" Grid.Column="0">
+                        <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                            <Image Grid.Column="0"
+                                 Grid.Row="0"
+                                 BackgroundColor="Transparent"
+                                 HeightRequest="35"
+                                 WidthRequest="35"
+                                 BindingContextChanged="leftImage_BindingContextChanged"
+                                 Source="EditIcon.png" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+            </syncfusion:SfListView.LeftSwipeTemplate>
 
             <syncfusion:SfListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="5">
+                    <Grid Padding="5" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
@@ -80,9 +99,11 @@
                     </Grid>
                 </DataTemplate>
             </syncfusion:SfListView.ItemTemplate>
+        
         </syncfusion:SfListView>
     </StackLayout>
 </ContentPage>
+    
 
 <!--<ListView ItemsSource="{Binding Todos, Mode=TwoWay}"
               CachingStrategy="RecycleElement"

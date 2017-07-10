@@ -237,6 +237,7 @@
   <ItemGroup>
     <Content Include="Images\Delete.png" />
     <Content Include="Images\Delete1.png" />
+    <Content Include="Images\EditIcon.png" />
     <Content Include="Images\hamburger.png" />
   </ItemGroup>
   <ItemGroup>

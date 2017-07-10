@@ -82,7 +82,7 @@ namespace PrismUnityToDolistMobile.ViewModels
         }
 
         // Commands
-        public DelegateCommand<TodoItem> SaveTodoCommand { get; set; }
+        public DelegateCommand SaveTodoCommand { get; set; }
         public DelegateCommand<TodoItem> SaveTodoCommand2 { get; set; }
         public DelegateCommand NavigateToListViewCommand { get; private set; }
         public DelegateCommand NavigateToLoginCommand { get; private set; }
@@ -97,7 +97,7 @@ namespace PrismUnityToDolistMobile.ViewModels
             _navigationService = navigationService;
             _pageDialogService = pageDialogService;
             _todoService = todoService;
-            SaveTodoCommand = new DelegateCommand<TodoItem>(SaveTodo);
+            SaveTodoCommand = new DelegateCommand(SaveTodo);
             SaveTodoCommand2 = new DelegateCommand<TodoItem>(SaveTodo2);
             NavigateToListViewCommand = new DelegateCommand(NavigateToListViewPage);
             NavigateToLoginCommand = new DelegateCommand(NavigateToLoginPage);
@@ -146,9 +146,13 @@ namespace PrismUnityToDolistMobile.ViewModels
             _navigationService.NavigateAsync("TodoDetail");
         }
 
-        private void SaveTodo(TodoItem todo)
+        private void SaveTodo()
         {
-            _todoService.SaveTodo(todo);
+            _todoService.SaveTodo(Todo);
+            _pageDialogService.DisplayAlertAsync("Todo Saved", Todo.Text + " has been Saved!", "OK");
+            Todo.Text = "";
+            this.RaisePropertyChanged("Todo");
+            
         }
 
         private void TodoDetail(TodoItem obj)

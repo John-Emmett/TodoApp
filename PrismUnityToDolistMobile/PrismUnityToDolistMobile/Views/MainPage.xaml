@@ -13,7 +13,7 @@
         <StackLayout Spacing="10" Padding="20" VerticalOptions="Center">
             <Label Text="Enter a Task" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Large"/>
             <Entry Text="{Binding Todo.Text, Mode=TwoWay}" IsVisible="{Binding Enabled}"/>
-            <Button Text="{Binding ButtonText}" Command="{Binding SaveTodoCommand}" CommandParameter="{Binding Todo}" TextColor="White" BackgroundColor="#77D065"/>
+            <Button Text="{Binding ButtonText}" Command="{Binding SaveTodoCommand,Mode=TwoWay}" CommandParameter="{Binding Todo}" TextColor="White" BackgroundColor="#77D065"/>
            <!-- <Button Text="{Binding ButtonText}" Command="{Binding SaveTodoCommand}" CommandParameter="{Binding Todo}" TextColor="White" BackgroundColor="#77D065"/>
             <Button Text="Go to ToDo List" Command="{Binding NavigateToListViewCommand}" TextColor="White" BackgroundColor="#77D065"/>
             <Button Text="Go to Web View" Command="{Binding NavigateToWebViewCommand}" TextColor="White" BackgroundColor="#77D065"/>-->
