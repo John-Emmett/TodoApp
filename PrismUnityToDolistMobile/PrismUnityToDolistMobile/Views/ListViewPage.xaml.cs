@@ -51,6 +51,7 @@ namespace PrismUnityToDolistMobile.Views
 
         public void SortAlphaAsc()
         {
+            synclist.DataSource.SortDescriptors.Clear();
             synclist.DataSource.SortDescriptors.Add(new SortDescriptor()
             {
                 PropertyName = "Text",
@@ -62,6 +63,7 @@ namespace PrismUnityToDolistMobile.Views
 
         public void SortAlphaDesc()
         {
+            synclist.DataSource.SortDescriptors.Clear();
             synclist.DataSource.SortDescriptors.Add(new SortDescriptor()
             {
                 PropertyName = "Text",
@@ -72,6 +74,7 @@ namespace PrismUnityToDolistMobile.Views
 
         public void SortDateMostRecent()
         {
+            synclist.DataSource.SortDescriptors.Clear();
             synclist.DataSource.SortDescriptors.Add(new SortDescriptor()
             {
                 PropertyName = "CreatedAt",
